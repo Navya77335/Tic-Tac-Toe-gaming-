@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            h1{
+                font-size: 45px;
+                color:crimson;
+                font-style:italic;
+            }
+            .game{
+                height:20%;
+                text-align: center;
+                margin-top:8%;
+            }
+            .game .tic{
+                height:70px;
+                width:5%;
+                margin-top:5px;
+                margin-left:5px;
+            }
+            .game #tac{
+                height:40px;
+                width:7%;
+                margin-top:2%;
+                background-color:mediumaquamarine;
+                color:black;
+            }
+            #main{
+                display:flex;
+                justify-content:center;
+            }
+            #msg{
+                font-size:40px;
+                margin-top:20px;
+                font-weight:bold;
+                font-style:oblique;
+                color:blueviolet; 
+            }
+        </style>
+    </head>
+    <body>
+        <div class="game">
+            <h1>Tic-Tac-Toe</h1>
+            <div id="main">
+                <button class="tic"></button>
+                <button class="tic"></button>
+                <button class="tic"></button>
+            </div>
+            <div id="main">
+                <button class="tic"></button>
+                <button class="tic"></button>
+                <button class="tic"></button>
+            </div>
+            <div id="main">
+                <button class="tic"></button>
+                <button class="tic"></button>
+                <button class="tic"></button>
+            </div>
+            <button id="tac">Start</button>
+            <div id="msg"></div>
+        </div>
+        <script>
+            let turnon='X';
+            let active=false;
+            let list=['','','','','','','','','']
+
+            let buttons=document.querySelectorAll('.tic');
+            let Startbutton=document.getElementById('tac');
+            let msgdiv=document.getElementById('msg');
+            //handle the start button
+            let set =()=>{
+                active=true;
+                turnon='X';
+                list=['','','','','','','','',''];
+                buttons.forEach(button=>{
+                    button.innerText='';
+                    button.disabled=false;
+                    button.style.backgroundColor = 'gray';
+                    button.style.color='yellow';
+                    button.style.size='40%';
+                });
+                Startbutton.innerText='Restart';
+                msgdiv.innerText='';
+            };
+            let seelist = ()=>{
+                let setlist =[
+                    [0,1,2],
+                    [3,4,5],
+                    [6,7,8],
+                    [0,3,6],
+                    [1,4,7],
+                    [2,5,8],
+                    [0,4,8],
+                    [2,4,6]
+                ];
+                for(let i of setlist){
+                    let [a,b,c]=i;
+                    if (list[a] && list[a] === list[b] && list[a] === list[c]){
+                        active=false;
+                        msgdiv.innerText = `${turnon} is the winner`;
+                        buttons[a].style.backgroundColor = 'green';
+                        buttons[b].style.backgroundColor = 'green';
+                        buttons[c].style.backgroundColor = 'green';
+                        buttons.forEach(button => button.disabled = true);
+                        return true;
+                    }
+                }
+                if (list.every(cell => cell)) {
+                    active = false;
+                    msgdiv.innerText = 'It Is Tie';
+                    return true;
+                }
+
+                return false;
+                
+        };
+        // Handle button clicks
+        const handle = (index) => {
+            if (!active || list[index]) return;
+
+            list[index] = turnon;
+            buttons[index].innerText = turnon;
+
+            if (seelist()) return;
+
+            turnon = turnon === 'X' ? 'O' : 'X';
+        };
+
+            // Attach event listeners to buttons
+        buttons.forEach((button, index) => {
+            button.addEventListener('click', () => handle(index));
+        });
+        Startbutton.addEventListener('click',()=>{
+            if(active) return;
+            set();
+        });
+        </script>
+    </body>
+</html>
